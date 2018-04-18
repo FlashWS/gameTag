@@ -14,7 +14,7 @@ function Tag () {
 
     values.sort(() => Math.random() - 0.5);
 
-    values.forEach(function (item) {
+    values.forEach((item) => {
       cards.push({
         value: item,
         x: x,
@@ -37,7 +37,7 @@ function Tag () {
     let gameField = document.getElementById('game');
     gameField.innerHTML = '';
 
-    cards.forEach(function (item, i) {
+    cards.forEach((item, i) => {
 
       let g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
       g.setAttribute('data-id', i);
@@ -62,6 +62,7 @@ function Tag () {
       gameField.appendChild(g);
 
     });
+
     eventClick();
   };
 
@@ -107,7 +108,7 @@ function Tag () {
     if (JSON.stringify(defaultValues) === JSON.stringify(resultValues)) {
       soundPlay('win');
 
-      if(confirm(`Поздравляем, вы выйграли за ${steps} шагов. Начать заново?`)){
+      if (confirm(`Поздравляем, вы выйграли за ${steps} шагов. Начать заново?`)) {
         run();
       }
     }
