@@ -12,9 +12,7 @@ function Tag () {
     let x = 0;
     let y = 0;
 
-    // values.sort(function () {
-    //   return Math.random() - 0.5;
-    // });
+    values.sort(() => Math.random() - 0.5);
 
     values.forEach(function (item) {
       cards.push({
