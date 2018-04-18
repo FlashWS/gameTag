@@ -1,3 +1,7 @@
+/**
+ * Лисин Сергей lisin2@yandex.ru
+ */
+
 "use strict";
 
 function Tag () {
