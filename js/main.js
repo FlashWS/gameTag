@@ -12,7 +12,6 @@ function Tag () {
 
   const spoilGame = defaultValues => {
     let values = [...defaultValues];
-    let cards = [];
     let x = 0;
     let y = 0;
 
@@ -33,10 +32,10 @@ function Tag () {
       }
     });
 
-    return cards;
+    drawGameField();
   };
 
-  const drawGameField = cards => {
+  const drawGameField = () => {
 
     let gameField = document.getElementById('game');
     gameField.innerHTML = '';
@@ -67,6 +66,7 @@ function Tag () {
 
     });
 
+    checkWin();
     eventClick();
   };
 
@@ -91,10 +91,9 @@ function Tag () {
     if ((Math.abs(card.x - emptyCard.x) + Math.abs(card.y - emptyCard.y)) === 1) {
       emptyCard.value = card.value;
       card.value = null;
-      drawGameField(cards);
       steps++;
       soundPlay('change');
-      checkWin();
+      drawGameField();
     } else {
       soundPlay('error');
     }
@@ -120,8 +119,7 @@ function Tag () {
 
   const run = () => {
     steps = 0;
-    cards = spoilGame(defaultValues);
-    drawGameField(cards);
+    spoilGame(defaultValues);
   };
 
   this.run = () => run()
