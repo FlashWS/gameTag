@@ -6,11 +6,11 @@
 
 function Tag () {
 
-  let defaultValues = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, null];
+  const defaultValues = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, null];
   let cards = [];
   let steps = 0;
 
-  let spoilGame = (defaultValues) => {
+  const spoilGame = defaultValues => {
     let values = [...defaultValues];
     let cards = [];
     let x = 0;
@@ -36,7 +36,7 @@ function Tag () {
     return cards;
   };
 
-  let drawGameField = (cards) => {
+  const drawGameField = cards => {
 
     let gameField = document.getElementById('game');
     gameField.innerHTML = '';
@@ -70,7 +70,7 @@ function Tag () {
     eventClick();
   };
 
-  let eventClick = () => {
+  const eventClick = () => {
     let cardElements = document.getElementsByClassName('card-group');
 
     for (let i = 0; i < cardElements.length; i++) {
@@ -78,7 +78,7 @@ function Tag () {
     }
   };
 
-  let changeCard = (id) => {
+  const changeCard = id => {
     let card = cards[id];
 
     if (card.value === null) {
@@ -100,13 +100,13 @@ function Tag () {
     }
   };
 
-  let soundPlay = (name) => {
+  const soundPlay = name => {
     let audio = new Audio();
     audio.src = `media/${name}.mp3`;
     audio.autoplay = true;
   };
 
-  let checkWin = () => {
+  const checkWin = () => {
     let resultValues = cards.map((card) => card.value);
 
     if (JSON.stringify(defaultValues) === JSON.stringify(resultValues)) {
@@ -118,7 +118,7 @@ function Tag () {
     }
   };
 
-  let run = () => {
+  const run = () => {
     steps = 0;
     cards = spoilGame(defaultValues);
     drawGameField(cards);
