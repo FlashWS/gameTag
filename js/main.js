@@ -11,13 +11,13 @@ function Tag () {
   let steps = 0;
 
   const spoilGame = defaultValues => {
-    let values = [...defaultValues];
+    let randomValues = [...defaultValues];
     let x = 0;
     let y = 0;
 
-    values.sort(() => Math.random() - 0.5);
+    randomValues.sort(() => Math.random() - 0.5);
 
-    values.forEach((item) => {
+    randomValues.forEach((item) => {
       cards.push({
         value: item,
         x: x,
