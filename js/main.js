@@ -4,128 +4,118 @@
 
 "use strict";
 
-function Tag () {
+class Tag {
 
-  const defaultValues = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, null];
-  let cards = [];
-  let steps = 0;
+  constructor () {
+    this.defaultValues = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, null];
+    this.cards = [];
+    this.steps = 0;
+  }
 
-  const spoilGame = defaultValues => {
-    let randomValues = [...defaultValues];
+  getRandomizedValues () {
+    let randomValues = [...this.defaultValues];
     let x = 0;
     let y = 0;
 
-    randomValues.sort(() => Math.random() - 0.5);
+    this.cards = randomValues
+      .sort(() => Math.random() - 0.5)
+      .map((value) => {
+        if (x === 4) {
+          x = 0;
+          y++;
+        }
 
-    randomValues.forEach((item) => {
-      cards.push({
-        value: item,
-        x: x,
-        y: y
+        return {
+          value: value,
+          x: x++,
+          y: y
+        }
       });
-
-      x++;
-
-      if (x === 4) {
-        x = 0;
-        y++;
-      }
-    });
-
-    drawGameField();
   };
 
-  const drawGameField = () => {
+  drawGameField () {
 
     let gameField = document.getElementById('game');
+    const sizeField = 200;
+
     gameField.innerHTML = '';
 
-    cards.forEach((item, i) => {
-
-      let g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-      g.setAttribute('data-id', i);
-      g.setAttribute('class', 'card-group');
-
-      let cardSquare = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-      cardSquare.setAttribute('class', 'card-square');
-      cardSquare.setAttribute('x', item.x * 200);
-      cardSquare.setAttribute('y', item.y * 200);
-      cardSquare.setAttribute('width', 200);
-      cardSquare.setAttribute('height', 200);
-      g.appendChild(cardSquare);
-
-      let cardValue = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-      cardValue.setAttribute('class', 'card-text');
-      cardValue.setAttribute('text-anchor', 'middle');
-      cardValue.setAttribute('x', item.x * 200 + 100);
-      cardValue.setAttribute('y', item.y * 200 + 110);
-      cardValue.textContent = item.value;
-      g.appendChild(cardValue);
-
-      gameField.appendChild(g);
-
+    this.cards.forEach((item, i) => {
+      let g = `
+        <g data-id="${i}" class="card-group">
+            <rect 
+              class="${(item.value) ? 'card-square' : 'card-square-empty'}" 
+              x="${item.x * sizeField}" 
+              y="${item.y * sizeField}" 
+              width="${sizeField}" 
+              height="${sizeField}">
+            </rect>
+            <text 
+              class="card-text" 
+              text-anchor="middle" 
+              x="${item.x * sizeField + sizeField / 2 + 10 }" 
+              y="${item.y * sizeField + sizeField / 2 + 10}">
+                ${(item.value) ? item.value : ''}
+            </text>
+        </g>
+      `;
+      gameField.innerHTML += g;
     });
 
-    checkWin();
-    eventClick();
-  };
-
-  const eventClick = () => {
     let cardElements = document.getElementsByClassName('card-group');
 
     for (let i = 0; i < cardElements.length; i++) {
-      cardElements[i].onclick = (e) => changeCard(e.currentTarget.dataset.id);
+      cardElements[i].onclick = (e) => this.changeCard(e.currentTarget.dataset.id);
     }
   };
 
-  const changeCard = id => {
-    let card = cards[id];
+  changeCard (id) {
+    let card = this.cards[id];
 
     if (card.value === null) {
-      soundPlay('error');
+      this.playSound('error');
       return
     }
 
-    let emptyCard = cards.filter((card) => card.value === null)[0];
+    let emptyCard = this.cards.filter((card) => card.value === null)[0];
 
     if ((Math.abs(card.x - emptyCard.x) + Math.abs(card.y - emptyCard.y)) === 1) {
       emptyCard.value = card.value;
       card.value = null;
-      steps++;
-      soundPlay('change');
-      drawGameField();
+      this.steps++;
+      this.playSound('change');
+      this.drawGameField();
+      this.checkWin();
     } else {
-      soundPlay('error');
+      this.playSound('error');
     }
   };
 
-  const soundPlay = name => {
+  playSound (name) {
     let audio = new Audio();
     audio.src = `media/${name}.mp3`;
     audio.autoplay = true;
   };
 
-  const checkWin = () => {
-    let resultValues = cards.map((card) => card.value);
+  checkWin () {
+    let resultValues = this.cards.map((card) => card.value);
 
-    if (JSON.stringify(defaultValues) === JSON.stringify(resultValues)) {
-      soundPlay('win');
+    if (JSON.stringify(this.defaultValues) === JSON.stringify(resultValues)) {
+      this.playSound('win');
 
-      if (confirm(`Поздравляем, вы выйграли за ${steps} шагов. Начать заново?`)) {
-        run();
+      if (confirm(`Поздравляем, вы выиграли за ${this.steps} шагов. Начать заново?`)) {
+        this.run();
       }
     }
   };
 
-  const run = () => {
-    steps = 0;
-    spoilGame(defaultValues);
+  run () {
+    this.steps = 0;
+    this.getRandomizedValues(this.defaultValues);
+    this.drawGameField();
   };
-
-  this.run = () => run()
 }
 
-let tag = new Tag();
-tag.run();
+new Tag().run();
 
 

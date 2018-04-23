@@ -112,6 +112,10 @@ textarea {
     stroke: #000;
     fill: #d5fff1;
 }
+.card-square-empty{
+    stroke: #000;
+    fill: #c7c8cd;
+}
 .card-text{
     font-size: 30px;
 }
