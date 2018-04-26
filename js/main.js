@@ -12,7 +12,14 @@ class Tag {
     this.steps = 0;
   }
 
-  getRandomizedValues () {
+
+  run () {
+    this.steps = 0;
+    this._getRandomizedValues(this.defaultValues);
+    this._drawGameField();
+  };
+
+  _getRandomizedValues () {
     let randomValues = [...this.defaultValues];
     let x = 0;
     let y = 0;
@@ -33,12 +40,10 @@ class Tag {
       });
   };
 
-  drawGameField () {
-
+  _drawGameField () {
     let gameField = document.getElementById('game');
+    let cardsHTML = '';
     const sizeField = 200;
-
-    gameField.innerHTML = '';
 
     this.cards.forEach((item, i) => {
       let g = `
@@ -59,60 +64,58 @@ class Tag {
             </text>
         </g>
       `;
-      gameField.innerHTML += g;
+      cardsHTML += g;
     });
+
+    gameField.innerHTML = cardsHTML;
 
     let cardElements = document.getElementsByClassName('card-group');
 
     for (let i = 0; i < cardElements.length; i++) {
-      cardElements[i].onclick = (e) => this.changeCard(e.currentTarget.dataset.id);
+      cardElements[i].onclick = (e) => this._clickCard(e.currentTarget.dataset.id);
     }
   };
 
-  changeCard (id) {
+  _clickCard (id) {
     let card = this.cards[id];
 
     if (card.value === null) {
-      this.playSound('error');
+      this._playSound('error');
       return
     }
 
-    let emptyCard = this.cards.filter((card) => card.value === null)[0];
+    let emptyCard = this.cards
+      .filter((card) => card.value === null)
+      .find((value, index) => index === 0);
 
     if ((Math.abs(card.x - emptyCard.x) + Math.abs(card.y - emptyCard.y)) === 1) {
       emptyCard.value = card.value;
       card.value = null;
       this.steps++;
-      this.playSound('change');
-      this.drawGameField();
-      this.checkWin();
+      this._playSound('change');
+      this._drawGameField();
+      this._checkWin();
     } else {
-      this.playSound('error');
+      this._playSound('error');
     }
   };
 
-  playSound (name) {
+  _playSound (name) {
     let audio = new Audio();
     audio.src = `media/${name}.mp3`;
     audio.autoplay = true;
   };
 
-  checkWin () {
+  _checkWin () {
     let resultValues = this.cards.map((card) => card.value);
 
     if (JSON.stringify(this.defaultValues) === JSON.stringify(resultValues)) {
-      this.playSound('win');
+      this._playSound('win');
 
       if (confirm(`Поздравляем, вы выиграли за ${this.steps} шагов. Начать заново?`)) {
         this.run();
       }
     }
-  };
-
-  run () {
-    this.steps = 0;
-    this.getRandomizedValues(this.defaultValues);
-    this.drawGameField();
   };
 }
 
