@@ -41,9 +41,9 @@ class Tag {
   };
 
   _drawGameField () {
+    const sizeField = 150;
     let gameField = document.getElementById('game');
     let cardsHTML = '';
-    const sizeField = 200;
 
     this.cards.forEach((item, i) => {
       let g = `
@@ -58,7 +58,7 @@ class Tag {
             <text 
               class="card-text" 
               text-anchor="middle" 
-              x="${item.x * sizeField + sizeField / 2 + 10 }" 
+              x="${item.x * sizeField + sizeField / 2}" 
               y="${item.y * sizeField + sizeField / 2 + 10}">
                 ${(item.value) ? item.value : ''}
             </text>
@@ -109,7 +109,7 @@ class Tag {
   _checkWin () {
     let resultValues = this.cards.map((card) => card.value);
 
-    if (JSON.stringify(this.defaultValues) === JSON.stringify(resultValues)) {
+    if (this.defaultValues.toString() === resultValues.toString()) {
       this._playSound('win');
 
       if (confirm(`Поздравляем, вы выиграли за ${this.steps} шагов. Начать заново?`)) {
