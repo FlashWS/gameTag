@@ -12,12 +12,11 @@ class Tag {
     this.steps = 0;
   }
 
-
   run () {
     this.steps = 0;
     this._getRandomizedValues(this.defaultValues);
     this._drawGameField();
-  };
+  }
 
   _getRandomizedValues () {
     let randomValues = [...this.defaultValues];
@@ -38,7 +37,7 @@ class Tag {
           y: y
         }
       });
-  };
+  }
 
   _drawGameField () {
     const sizeField = 150;
@@ -74,7 +73,7 @@ class Tag {
     for (let i = 0; i < cardElements.length; i++) {
       cardElements[i].onclick = (e) => this._clickCard(e.currentTarget.dataset.id);
     }
-  };
+  }
 
   _clickCard (id) {
     let card = this.cards[id];
@@ -97,13 +96,13 @@ class Tag {
     } else {
       this._playSound('error');
     }
-  };
+  }
 
   _playSound (name) {
     let audio = new Audio();
     audio.src = `media/${name}.mp3`;
     audio.autoplay = true;
-  };
+  }
 
   _checkWin () {
     let resultValues = this.cards.map((card) => card.value);
@@ -115,7 +114,8 @@ class Tag {
         this.run();
       }
     }
-  };
+  }
+
 }
 
 new Tag().run();
