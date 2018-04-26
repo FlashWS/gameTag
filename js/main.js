@@ -35,7 +35,7 @@ class Tag {
           value: value,
           x: x++,
           y: y
-        }
+        };
       });
   }
 
@@ -80,7 +80,7 @@ class Tag {
 
     if (card.value === null) {
       this._playSound('error');
-      return
+      return;
     }
 
     let emptyCard = this.cards.find(card => card.value === null);
@@ -118,5 +118,3 @@ class Tag {
 }
 
 new Tag().run();
-
-
