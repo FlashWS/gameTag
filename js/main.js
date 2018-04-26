@@ -85,8 +85,7 @@ class Tag {
     }
 
     let emptyCard = this.cards
-      .filter((card) => card.value === null)
-      .find((value, index) => index === 0);
+      .find((card) => card.value === null);
 
     if ((Math.abs(card.x - emptyCard.x) + Math.abs(card.y - emptyCard.y)) === 1) {
       emptyCard.value = card.value;
