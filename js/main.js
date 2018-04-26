@@ -25,7 +25,7 @@ class Tag {
 
     this.cards = randomValues
       .sort(() => Math.random() - 0.5)
-      .map((value) => {
+      .map(value => {
         if (x === 4) {
           x = 0;
           y++;
@@ -83,8 +83,7 @@ class Tag {
       return
     }
 
-    let emptyCard = this.cards
-      .find((card) => card.value === null);
+    let emptyCard = this.cards.find(card => card.value === null);
 
     if ((Math.abs(card.x - emptyCard.x) + Math.abs(card.y - emptyCard.y)) === 1) {
       emptyCard.value = card.value;
@@ -105,7 +104,7 @@ class Tag {
   }
 
   _checkWin () {
-    let resultValues = this.cards.map((card) => card.value);
+    let resultValues = this.cards.map(card => card.value);
 
     if (this.defaultValues.toString() === resultValues.toString()) {
       this._playSound('win');
