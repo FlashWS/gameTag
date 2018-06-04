@@ -10,12 +10,14 @@ class Tag {
     this.defaultValues = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, null];
     this.cards = [];
     this.steps = 0;
+    this.gameField = document.getElementById('game');
   }
 
   run () {
     this.steps = 0;
     this._getRandomizedValues(this.defaultValues);
     this._drawGameField();
+    this._addEvent();
   }
 
   _getRandomizedValues () {
@@ -41,7 +43,6 @@ class Tag {
 
   _drawGameField () {
     const sizeField = 150;
-    let gameField = document.getElementById('game');
     let cardsHTML = '';
 
     this.cards.forEach((item, i) => {
@@ -66,13 +67,21 @@ class Tag {
       cardsHTML += g;
     });
 
-    gameField.innerHTML = cardsHTML;
+    this.gameField.innerHTML = cardsHTML;
+  }
 
-    let cardElements = document.getElementsByClassName('card-group');
+  _addEvent () {
+    this.gameField.addEventListener('click', (e) => {
+      let target = e.target;
 
-    for (let i = 0; i < cardElements.length; i++) {
-      cardElements[i].onclick = (e) => this._clickCard(e.currentTarget.dataset.id);
-    }
+      while (target != 'svg') {
+        if (target.tagName == 'g') {
+          this._clickCard(target.dataset.id);
+          return;
+        }
+        target = target.parentNode;
+      }
+    });
   }
 
   _clickCard (id) {
@@ -98,20 +107,25 @@ class Tag {
   }
 
   _playSound (name) {
-    let audio = new Audio();
-    audio.src = `media/${name}.mp3`;
-    audio.autoplay = true;
+    return new Promise((resolve) => {
+      let audio = new Audio();
+      audio.src = `media/${name}.mp3`;
+      audio.autoplay = true;
+      audio.onplaying = resolve;
+    })
   }
 
   _checkWin () {
     let resultValues = this.cards.map(card => card.value);
 
     if (this.defaultValues.toString() === resultValues.toString()) {
-      this._playSound('win');
+      let play = this._playSound('win');
 
-      if (confirm(`Поздравляем, вы выиграли за ${this.steps} шагов. Начать заново?`)) {
-        this.run();
-      }
+      play.then(() => {
+        if (confirm(`Поздравляем, вы выиграли за ${this.steps} шагов. Начать заново?`)) {
+          this.run();
+        }
+      });
     }
   }
 
